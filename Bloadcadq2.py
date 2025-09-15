@@ -248,4 +248,25 @@ class ttsign:
         return tmp_string
     def reverse(self, num):
         tmp_string = self.hex_string(num)
-        return int(tmp_string[1:] + tmp_string[:1],
+        return int(tmp_string[1:] + tmp_string[:1], 16)
+P = '\x1b[1;97m'
+B = '\x1b[1;94m'
+O = '\x1b[1;96m'
+Z = '\x1b[1;30m'
+X = '\x1b[1;33m'
+F = '\x1b[2;32m'
+Z = '\x1b[1;31m'
+L = '\x1b[1;95m'
+C = '\x1b[2;35m'
+A = '\x1b[2;39m'
+P = '\x1b[38;5;231m'
+J = '\x1b[38;5;208m'
+J1 = '\x1b[38;5;202m'
+J2 = '\x1b[38;5;203m'
+J21 = '\x1b[38;5;204m'
+J22 = '\x1b[38;5;209m'
+F1 = '\x1b[38;5;76m'
+C1 = '\x1b[38;5;120m'
+P1 = '\x1b[38;5;150m'
+P2 = '\x1b[38;5;190m'
+def clear():
